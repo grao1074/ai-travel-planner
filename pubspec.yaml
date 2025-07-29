@@ -1,0 +1,59 @@
+name: travel_planner
+description: An AI-powered travel planning app
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  
+  # State Management
+  flutter_bloc: ^8.1.3
+  
+  # Code Generation
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  
+  # Network & API
+  dio: ^5.3.2
+  
+  # UI Components
+  google_fonts: ^6.1.0
+  flutter_svg: ^2.0.9
+  
+  # Utilities
+  intl: ^0.18.1
+  uuid: ^4.2.1
+  shared_preferences: ^2.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  
+  # Code Generation
+  build_runner: ^2.4.7
+  freezed: ^2.4.6
+  json_serializable: ^6.7.1
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+  
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700 
