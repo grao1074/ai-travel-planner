@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import '../../domain/entities/activity.dart';
 
 part 'activity_model.freezed.dart';
@@ -15,11 +16,12 @@ class ActivityModel with _$ActivityModel {
     required String location,
     double? cost,
     String? notes,
-    @JsonKey(name: 'is_completed') bool? isCompleted,
-    @JsonKey(name: 'image_url') String? imageUrl,
+    bool? isCompleted,
+    String? imageUrl,
   }) = _ActivityModel;
 
-  factory ActivityModel.fromJson(Map<String, dynamic> json) => _$ActivityModelFromJson(json);
+  factory ActivityModel.fromJson(Map<String, dynamic> json) =>
+      _$ActivityModelFromJson(json);
 
   factory ActivityModel.fromEntity(Activity activity) {
     return ActivityModel(
@@ -35,7 +37,9 @@ class ActivityModel with _$ActivityModel {
       imageUrl: activity.imageUrl,
     );
   }
+}
 
+extension ActivityModelExtension on ActivityModel {
   Activity toEntity() {
     return Activity(
       id: id,

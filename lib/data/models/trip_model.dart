@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import '../../domain/entities/trip.dart';
 import 'destination_model.dart';
 import 'activity_model.dart';
@@ -12,18 +13,19 @@ class TripModel with _$TripModel {
     required String id,
     required String name,
     required String description,
-    @JsonKey(name: 'start_date') required DateTime startDate,
-    @JsonKey(name: 'end_date') required DateTime endDate,
+    required DateTime startDate,
+    required DateTime endDate,
     required List<DestinationModel> destinations,
     required List<ActivityModel> activities,
     required double budget,
     required TripStatus status,
-    @JsonKey(name: 'image_url') String? imageUrl,
-    @JsonKey(name: 'created_at') DateTime? createdAt,
-    @JsonKey(name: 'updated_at') DateTime? updatedAt,
+    String? imageUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) = _TripModel;
 
-  factory TripModel.fromJson(Map<String, dynamic> json) => _$TripModelFromJson(json);
+  factory TripModel.fromJson(Map<String, dynamic> json) =>
+      _$TripModelFromJson(json);
 
   factory TripModel.fromEntity(Trip trip) {
     return TripModel(
@@ -32,8 +34,8 @@ class TripModel with _$TripModel {
       description: trip.description,
       startDate: trip.startDate,
       endDate: trip.endDate,
-      destinations: trip.destinations.map((d) => DestinationModel.fromEntity(d)).toList(),
-      activities: trip.activities.map((a) => ActivityModel.fromEntity(a)).toList(),
+      destinations: trip.destinations.map((destination) => DestinationModel.fromEntity(destination)).toList(),
+      activities: trip.activities.map((activity) => ActivityModel.fromEntity(activity)).toList(),
       budget: trip.budget,
       status: trip.status,
       imageUrl: trip.imageUrl,
@@ -41,7 +43,9 @@ class TripModel with _$TripModel {
       updatedAt: trip.updatedAt,
     );
   }
+}
 
+extension TripModelExtension on TripModel {
   Trip toEntity() {
     return Trip(
       id: id,
@@ -49,8 +53,8 @@ class TripModel with _$TripModel {
       description: description,
       startDate: startDate,
       endDate: endDate,
-      destinations: destinations.map((d) => d.toEntity()).toList(),
-      activities: activities.map((a) => a.toEntity()).toList(),
+      destinations: destinations.map((destination) => destination.toEntity()).toList(),
+      activities: activities.map((activity) => activity.toEntity()).toList(),
       budget: budget,
       status: status,
       imageUrl: imageUrl,

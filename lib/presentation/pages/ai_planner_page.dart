@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../domain/entities/trip.dart';
+import '../../domain/entities/destination.dart';
 import '../blocs/ai_planner_bloc.dart';
 import '../widgets/destination_card.dart';
 
@@ -28,11 +30,7 @@ class _AiPlannerPageState extends State<AiPlannerPage> {
     super.initState();
     // Load initial recommendations
     context.read<AiPlannerBloc>().add(
-      const AiPlannerEvent.getRecommendedDestinations(
-        budget: 5000,
-        interests: ['Culture & History', 'Food & Cuisine'],
-        preferredClimate: 'Temperate',
-      ),
+      const AiPlannerEvent.getRecommendations('Paris'),
     );
   }
 
@@ -195,11 +193,7 @@ class _AiPlannerPageState extends State<AiPlannerPage> {
             TextButton(
               onPressed: () {
                 context.read<AiPlannerBloc>().add(
-                  AiPlannerEvent.getRecommendedDestinations(
-                    budget: 5000,
-                    interests: _selectedInterests,
-                    preferredClimate: 'Temperate',
-                  ),
+                  const AiPlannerEvent.getRecommendations('Paris'),
                 );
               },
               child: Text(
@@ -222,7 +216,7 @@ class _AiPlannerPageState extends State<AiPlannerPage> {
                 child: CircularProgressIndicator(color: Color(0xFF4A90E2)),
               ),
               destinationsLoaded: (destinations) => _buildDestinationsList(destinations),
-              recommendationsLoaded: (destinations) => _buildDestinationsList(destinations),
+              recommendationsLoaded: (recommendations) => _buildRecommendationsList(recommendations),
               tripPlanGenerated: (trip) => _buildTripPlanResult(trip),
               travelAdviceLoaded: (advice) => _buildTravelAdvice(advice),
               error: (message) => _buildErrorState(message),
@@ -239,6 +233,47 @@ class _AiPlannerPageState extends State<AiPlannerPage> {
         return Padding(
           padding: const EdgeInsets.only(bottom: 15),
           child: DestinationCard(destination: destination),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildRecommendationsList(List<String> recommendations) {
+    return Column(
+      children: recommendations.map((recommendation) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 15),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.lightbulb_outline,
+                color: const Color(0xFF4A90E2),
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  recommendation,
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: const Color(0xFF1A1A1A),
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       }).toList(),
     );

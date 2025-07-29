@@ -42,7 +42,7 @@ class TravelPlannerApp extends StatelessWidget {
           create: (context) => TripLocalDataSourceImpl(),
         ),
         RepositoryProvider<AiPlannerRemoteDataSource>(
-          create: (context) => AiPlannerRemoteDataSourceImpl(
+          create: (context) => AiPlannerRemoteDataSource(
             context.read<Dio>(),
           ),
         ),

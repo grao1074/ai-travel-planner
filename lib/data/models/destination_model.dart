@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import '../../domain/entities/destination.dart';
 
 part 'destination_model.freezed.dart';
@@ -14,13 +15,14 @@ class DestinationModel with _$DestinationModel {
     String? description,
     double? latitude,
     double? longitude,
-    @JsonKey(name: 'image_url') String? imageUrl,
+    String? imageUrl,
     List<String>? attractions,
-    @JsonKey(name: 'weather_info') String? weatherInfo,
-    @JsonKey(name: 'best_time_to_visit') String? bestTimeToVisit,
+    String? weatherInfo,
+    String? bestTimeToVisit,
   }) = _DestinationModel;
 
-  factory DestinationModel.fromJson(Map<String, dynamic> json) => _$DestinationModelFromJson(json);
+  factory DestinationModel.fromJson(Map<String, dynamic> json) =>
+      _$DestinationModelFromJson(json);
 
   factory DestinationModel.fromEntity(Destination destination) {
     return DestinationModel(
@@ -37,7 +39,9 @@ class DestinationModel with _$DestinationModel {
       bestTimeToVisit: destination.bestTimeToVisit,
     );
   }
+}
 
+extension DestinationModelExtension on DestinationModel {
   Destination toEntity() {
     return Destination(
       id: id,

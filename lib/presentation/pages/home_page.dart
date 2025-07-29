@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../domain/entities/trip.dart';
 import '../blocs/trip_bloc.dart';
 import '../widgets/trip_card.dart';
 import '../widgets/ai_planner_button.dart';

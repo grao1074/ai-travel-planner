@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/entities/trip.dart';
+import '../../domain/entities/destination.dart';
 import '../blocs/trip_bloc.dart';
 
 class CreateTripPage extends StatefulWidget {
@@ -324,6 +325,8 @@ class _CreateTripPageState extends State<CreateTripPage> {
             name: _destinationController.text,
             country: 'Unknown',
             city: _destinationController.text,
+            description: 'Trip destination',
+            imageUrl: '',
           ),
         ],
         activities: [],

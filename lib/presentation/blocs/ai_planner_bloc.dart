@@ -19,7 +19,7 @@ class AiPlannerBloc extends Bloc<AiPlannerEvent, AiPlannerState> {
       await event.map(
         searchDestinations: (e) async => await _onSearchDestinations(e.query, emit),
         generateTripPlan: (e) async => await _onGenerateTripPlan(e, emit),
-        getRecommendedDestinations: (e) async => await _onGetRecommendedDestinations(e, emit),
+        getRecommendations: (e) async => await _onGetRecommendations(e.destination, emit),
         getTravelAdvice: (e) async => await _onGetTravelAdvice(e.destination, emit),
       );
     });
@@ -44,7 +44,6 @@ class AiPlannerBloc extends Bloc<AiPlannerEvent, AiPlannerState> {
         endDate: event.endDate,
         budget: event.budget,
         interests: event.interests,
-        travelers: event.travelers,
       );
       emit(AiPlannerState.tripPlanGenerated(trip));
     } catch (e) {
@@ -52,15 +51,11 @@ class AiPlannerBloc extends Bloc<AiPlannerEvent, AiPlannerState> {
     }
   }
 
-  Future<void> _onGetRecommendedDestinations(_GetRecommendedDestinations event, Emitter<AiPlannerState> emit) async {
+  Future<void> _onGetRecommendations(String destination, Emitter<AiPlannerState> emit) async {
     emit(const AiPlannerState.loading());
     try {
-      final destinations = await _aiPlannerRepository.getRecommendedDestinations(
-        budget: event.budget,
-        interests: event.interests,
-        preferredClimate: event.preferredClimate,
-      );
-      emit(AiPlannerState.recommendationsLoaded(destinations));
+      final recommendations = await _aiPlannerRepository.getRecommendations(destination);
+      emit(AiPlannerState.recommendationsLoaded(recommendations));
     } catch (e) {
       emit(AiPlannerState.error(e.toString()));
     }
