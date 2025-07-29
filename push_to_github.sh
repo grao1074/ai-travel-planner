@@ -23,7 +23,8 @@ echo "✅ Git is configured"
 if git remote -v | grep -q origin; then
     echo "✅ Remote repository already configured"
     echo "Pushing to existing repository..."
-    git push -u origin master
+    git branch -M main
+    git push -u origin main
 else
     echo ""
     echo "📋 To create a GitHub repository, follow these steps:"
@@ -51,5 +52,7 @@ echo ""
 echo "🎉 Your AI Travel Planner app is ready for GitHub!"
 echo ""
 echo "📁 Project location: $(pwd)"
-echo "📱 To run the app: flutter run -d macos"
-echo "🌐 To run in browser: flutter run -d chrome" 
+echo "📱 To run the app: flutter run -d chrome"
+echo "🌐 App URL: http://localhost:8080"
+echo ""
+echo "📚 Check GITHUB_SETUP.md for detailed instructions" 
