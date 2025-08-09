@@ -38,7 +38,8 @@ else
     echo ""
     echo "After creating the repository, run these commands:"
     echo ""
-    echo "git remote add origin https://github.com/YOUR_USERNAME/ai-travel-planner.git"
+    echo "git remote add origin https://github.com/grao1074
+    ai-travel-planner.git"
     echo "git branch -M main"
     echo "git push -u origin main"
     echo ""

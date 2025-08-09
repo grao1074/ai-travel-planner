@@ -9,6 +9,9 @@ import 'domain/entities/trip.dart';
 import 'domain/repositories/trip_repository.dart';
 import 'domain/repositories/ai_planner_repository.dart';
 import 'domain/usecases/get_all_trips_usecase.dart';
+import 'domain/usecases/add_trip_usecase.dart';
+import 'domain/usecases/update_trip_usecase.dart';
+import 'domain/usecases/delete_trip_usecase.dart';
 import 'domain/usecases/generate_trip_plan_usecase.dart';
 
 // Data
@@ -61,6 +64,21 @@ class TravelPlannerApp extends StatelessWidget {
             context.read<TripRepository>(),
           ),
         ),
+        RepositoryProvider<AddTripUseCase>(
+          create: (context) => AddTripUseCase(
+            context.read<TripRepository>(),
+          ),
+        ),
+        RepositoryProvider<UpdateTripUseCase>(
+          create: (context) => UpdateTripUseCase(
+            context.read<TripRepository>(),
+          ),
+        ),
+        RepositoryProvider<DeleteTripUseCase>(
+          create: (context) => DeleteTripUseCase(
+            context.read<TripRepository>(),
+          ),
+        ),
         RepositoryProvider<GenerateTripPlanUseCase>(
           create: (context) => GenerateTripPlanUseCase(
             context.read<AiPlannerRepository>(),
@@ -71,7 +89,10 @@ class TravelPlannerApp extends StatelessWidget {
         providers: [
           BlocProvider<TripBloc>(
             create: (context) => TripBloc(
-              context.read<GetAllTripsUseCase>(),
+              getAllTripsUseCase: context.read<GetAllTripsUseCase>(),
+              addTripUseCase: context.read<AddTripUseCase>(),
+              updateTripUseCase: context.read<UpdateTripUseCase>(),
+              deleteTripUseCase: context.read<DeleteTripUseCase>(),
             )..add(const TripEvent.loadTrips()),
           ),
           BlocProvider<AiPlannerBloc>(

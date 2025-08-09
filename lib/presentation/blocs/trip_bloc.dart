@@ -2,6 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/trip.dart';
 import '../../domain/usecases/get_all_trips_usecase.dart';
+import '../../domain/usecases/add_trip_usecase.dart';
+import '../../domain/usecases/update_trip_usecase.dart';
+import '../../domain/usecases/delete_trip_usecase.dart';
 
 part 'trip_event.dart';
 part 'trip_state.dart';
@@ -9,8 +12,20 @@ part 'trip_bloc.freezed.dart';
 
 class TripBloc extends Bloc<TripEvent, TripState> {
   final GetAllTripsUseCase _getAllTripsUseCase;
+  final AddTripUseCase _addTripUseCase;
+  final UpdateTripUseCase _updateTripUseCase;
+  final DeleteTripUseCase _deleteTripUseCase;
 
-  TripBloc(this._getAllTripsUseCase) : super(const TripState.initial()) {
+  TripBloc({
+    required GetAllTripsUseCase getAllTripsUseCase,
+    required AddTripUseCase addTripUseCase,
+    required UpdateTripUseCase updateTripUseCase,
+    required DeleteTripUseCase deleteTripUseCase,
+  })  : _getAllTripsUseCase = getAllTripsUseCase,
+        _addTripUseCase = addTripUseCase,
+        _updateTripUseCase = updateTripUseCase,
+        _deleteTripUseCase = deleteTripUseCase,
+        super(const TripState.initial()) {
     on<TripEvent>((event, emit) async {
       await event.map(
         loadTrips: (e) async => await _onLoadTrips(emit),
@@ -48,12 +63,12 @@ class TripBloc extends Bloc<TripEvent, TripState> {
 
   Future<void> _onAddTrip(Trip trip, Emitter<TripState> emit) async {
     try {
-      final currentTrips = state.maybeWhen(
-        loaded: (trips) => trips,
-        orElse: () => <Trip>[],
-      );
-      final updatedTrips = [...currentTrips, trip];
-      emit(TripState.loaded(updatedTrips));
+      emit(const TripState.loading());
+      // Save the trip to storage
+      await _addTripUseCase.execute(trip);
+      // Reload all trips to get the updated list
+      final trips = await _getAllTripsUseCase.execute();
+      emit(TripState.loaded(trips));
     } catch (e) {
       emit(TripState.error(e.toString()));
     }
@@ -61,12 +76,12 @@ class TripBloc extends Bloc<TripEvent, TripState> {
 
   Future<void> _onUpdateTrip(Trip trip, Emitter<TripState> emit) async {
     try {
-      final currentTrips = state.maybeWhen(
-        loaded: (trips) => trips,
-        orElse: () => <Trip>[],
-      );
-      final updatedTrips = currentTrips.map((t) => t.id == trip.id ? trip : t).toList();
-      emit(TripState.loaded(updatedTrips));
+      emit(const TripState.loading());
+      // Update the trip in storage
+      await _updateTripUseCase.execute(trip);
+      // Reload all trips to get the updated list
+      final trips = await _getAllTripsUseCase.execute();
+      emit(TripState.loaded(trips));
     } catch (e) {
       emit(TripState.error(e.toString()));
     }
@@ -74,12 +89,12 @@ class TripBloc extends Bloc<TripEvent, TripState> {
 
   Future<void> _onDeleteTrip(String id, Emitter<TripState> emit) async {
     try {
-      final currentTrips = state.maybeWhen(
-        loaded: (trips) => trips,
-        orElse: () => <Trip>[],
-      );
-      final updatedTrips = currentTrips.where((t) => t.id != id).toList();
-      emit(TripState.loaded(updatedTrips));
+      emit(const TripState.loading());
+      // Delete the trip from storage
+      await _deleteTripUseCase.execute(id);
+      // Reload all trips to get the updated list
+      final trips = await _getAllTripsUseCase.execute();
+      emit(TripState.loaded(trips));
     } catch (e) {
       emit(TripState.error(e.toString()));
     }
