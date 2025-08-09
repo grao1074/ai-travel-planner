@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // Domain
-import 'domain/entities/trip.dart';
 import 'domain/repositories/trip_repository.dart';
 import 'domain/repositories/ai_planner_repository.dart';
 import 'domain/usecases/get_all_trips_usecase.dart';

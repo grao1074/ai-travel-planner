@@ -6,7 +6,7 @@ class UpdateTripUseCase {
 
   UpdateTripUseCase(this._tripRepository);
 
-  Future<void> execute(Trip trip) async {
+  Future<Trip> execute(Trip trip) async {
     return await _tripRepository.updateTrip(trip);
   }
 }
